@@ -1,32 +1,29 @@
 from dotenv import load_dotenv
+from importlib.metadata import version
+
 load_dotenv()
 
-import importlib.metadata
-from langchain_core import __version__ as core_version
-try:
-    lg_version = importlib.metadata.version("langgraph")
-except importlib.metadata.PackageNotFoundError:
-    lg_version = "unknown"
+core_version = version("langchain-core")
+lg_version = version("langgraph")
+from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
-from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 print(f"langchain-core version: {core_version}")
 print(f"langgraph version: {lg_version}")
 
 
-
-
 def main():
-    #Test Gemini
-    llm = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", temperature=0)
-    response = llm.invoke("Say 'setup complete!' in one word")
-    print(f"Response from ChatGoogleGenerativeAI: {response.content}")
 
-    #Test Anthropic
+    # Test openai
+    llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+    response = llm.invoke("Say 'setup complete!' in one word")
+    print(f"Response from ChatOpenAI: {response}")
+
+    # Test anthropic
     llm_anthropic = ChatAnthropic(model="claude-sonnet-4-5-20250929", temperature=0)
     response_anthropic = llm_anthropic.invoke("Say 'setup complete!' in one word")
-    print(f"Response from ChatAnthropic: {response_anthropic.content}")
+    print(f"Response from ChatAnthropic: {response_anthropic}")
 
     print("Setup complete!")
 
